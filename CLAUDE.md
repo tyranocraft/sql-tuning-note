@@ -5,8 +5,12 @@
 ## 작업 규칙
 
 - 사용자와의 대화 및 문서 작성은 한국어를 기본으로 한다
-- 구현 계획서는 `docs/plans/`에 Task별로 분할되어 있다 — `00-overview.md`(공통 컨텍스트) + `01`~`09` Task 파일
-- 원본 통합 계획서: `docs/superpowers/plans/2026-05-19-sql-tuning-note-mvp.md`
+- 구현 전 반드시 관련 문서를 참고할 것 (아래 "문서 참조" 섹션)
+
+## 문서 참조
+
+- `docs/PRD.md` — 제품 요구사항 정의서
+- `docs/plans/` — 구현 계획서 (Task별 분할). `00-overview.md`가 공통 컨텍스트 및 Task 의존성 테이블을 포함한다.
 
 ## 프로젝트 개요
 

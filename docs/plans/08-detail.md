@@ -477,9 +477,3 @@ npm run dev
 
 개발 서버를 중지한다.
 
-- [ ] **Step 8: 커밋**
-
-```bash
-git add src/app/[locale]/notes/[database]/[slug]/ src/components/DictionaryProvider.tsx src/components/Practice.tsx src/components/Quiz.tsx src/components/MDXComponents.tsx src/components/Sidebar.tsx
-git commit -m "feat: add content detail page with MDX rendering, practice toggle, and quiz"
-```

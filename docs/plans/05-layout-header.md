@@ -202,9 +202,3 @@ npm run dev
 
 개발 서버를 중지한다.
 
-- [ ] **Step 8: 커밋**
-
-```bash
-git add src/app/ src/components/Header.tsx src/components/LanguageSwitcher.tsx
-git commit -m "feat: add root layout, locale routing, header with language switcher"
-```

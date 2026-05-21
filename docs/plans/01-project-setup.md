@@ -97,11 +97,3 @@ export default function RootPage() {
 ```
 
 `src/app/globals.css`에서 `create-next-app`이 생성한 Tailwind 디렉티브만 남기고 나머지 기본 스타일을 모두 제거한다.
-
-- [ ] **Step 9: 커밋**
-
-```bash
-git init
-git add .
-git commit -m "chore: initialize Next.js project with TypeScript, Tailwind CSS, and Vitest"
-```

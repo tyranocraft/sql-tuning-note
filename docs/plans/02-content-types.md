@@ -465,9 +465,3 @@ After adding this index, `type` should change to `range` and `rows` should decre
 </Quiz>
 ```
 
-- [ ] **Step 6: 커밋**
-
-```bash
-git add src/lib/types.ts content/
-git commit -m "feat: add content types and sample MDX content (ko/en, 2 beginner topics)"
-```

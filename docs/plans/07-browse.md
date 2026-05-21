@@ -350,9 +350,3 @@ npm run dev
 
 개발 서버를 중지한다.
 
-- [ ] **Step 8: 커밋**
-
-```bash
-git add src/app/[locale]/notes/ src/components/Sidebar.tsx src/components/DifficultyFilter.tsx src/components/SearchBar.tsx src/components/ContentList.tsx
-git commit -m "feat: add content browse page with sidebar, difficulty filter, and search"
-```

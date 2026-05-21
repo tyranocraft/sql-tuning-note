@@ -263,14 +263,7 @@ npm run dev
 
 개발 서버를 중지한다.
 
-- [ ] **Step 9: 커밋**
-
-```bash
-git add src/app/sitemap.ts src/app/robots.ts src/app/layout.tsx src/app/[locale]/layout.tsx src/app/[locale]/page.tsx src/app/[locale]/notes/
-git commit -m "feat: add SEO metadata, sitemap, and robots.txt"
-```
-
-- [ ] **Step 10: Vercel 배포**
+- [ ] **Step 9: Vercel 배포**
 
 Vercel CLI를 사용하는 경우:
 
@@ -286,9 +279,3 @@ npx vercel --prod
 - 언어 전환이 정상 동작함
 - 모든 MVP 완료 기준을 충족함
 
-- [ ] **Step 11: 최종 커밋 (배포 설정 변경이 있는 경우)**
-
-```bash
-git add .
-git commit -m "chore: configure Vercel deployment"
-```

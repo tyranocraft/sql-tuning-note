@@ -141,9 +141,3 @@ npm run dev
 
 개발 서버를 중지한다.
 
-- [ ] **Step 4: 커밋**
-
-```bash
-git add src/app/[locale]/page.tsx src/components/ContentCard.tsx
-git commit -m "feat: add landing page with hero section and content cards"
-```

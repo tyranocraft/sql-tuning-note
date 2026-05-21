@@ -223,9 +223,3 @@ npm test
 
 기대 결과: 모든 테스트 PASS.
 
-- [ ] **Step 5: 커밋**
-
-```bash
-git add src/lib/content.ts src/lib/content-utils.ts src/__tests__/
-git commit -m "feat: add content loading utilities with filtering and search"
-```

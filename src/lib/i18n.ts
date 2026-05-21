@@ -6,7 +6,7 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
 };
 
 export const locales: Locale[] = ["ko", "en"];
-export const defaultLocale: Locale = "ko";
+export const defaultLocale: Locale = "en";
 
 export function getDictionary(locale: Locale): Promise<Dictionary> {
   return dictionaries[locale]();

@@ -11,7 +11,7 @@
 - 생성: `src/components/Header.tsx`
 - 생성: `src/components/LanguageSwitcher.tsx`
 
-- [ ] **Step 1: 루트 레이아웃 수정**
+- [x] **Step 1: 루트 레이아웃 수정**
 
 `src/app/layout.tsx` 교체:
 
@@ -52,7 +52,7 @@ export default function RootLayout({
 }
 ```
 
-- [ ] **Step 2: 루트 페이지 리다이렉트 설정**
+- [x] **Step 2: 루트 페이지 리다이렉트 설정**
 
 `src/app/page.tsx` 교체:
 
@@ -64,7 +64,7 @@ export default function RootPage() {
 }
 ```
 
-- [ ] **Step 3: LanguageSwitcher 컴포넌트 생성**
+- [x] **Step 3: LanguageSwitcher 컴포넌트 생성**
 
 `src/components/LanguageSwitcher.tsx` 생성:
 
@@ -102,7 +102,7 @@ export default function LanguageSwitcher({ locale }: { locale: Locale }) {
 }
 ```
 
-- [ ] **Step 4: Header 컴포넌트 생성**
+- [x] **Step 4: Header 컴포넌트 생성**
 
 `src/components/Header.tsx` 생성:
 
@@ -143,7 +143,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
 }
 ```
 
-- [ ] **Step 5: 로케일 레이아웃 생성**
+- [x] **Step 5: 로케일 레이아웃 생성**
 
 `src/app/[locale]/layout.tsx` 생성:
 
@@ -178,7 +178,7 @@ export default async function LocaleLayout({
 }
 ```
 
-- [ ] **Step 6: 로케일 페이지 플레이스홀더 생성**
+- [x] **Step 6: 로케일 페이지 플레이스홀더 생성**
 
 `src/app/[locale]/page.tsx` 생성:
 
@@ -188,7 +188,7 @@ export default function LocalePage() {
 }
 ```
 
-- [ ] **Step 7: 브라우저에서 확인**
+- [x] **Step 7: 브라우저에서 확인**
 
 ```bash
 npm run dev

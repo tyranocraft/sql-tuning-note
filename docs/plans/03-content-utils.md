@@ -10,7 +10,7 @@
 - 생성: `src/lib/content-utils.ts`
 - 생성: `src/__tests__/lib/content.test.ts`
 
-- [ ] **Step 1: 콘텐츠 로딩 실패 테스트 작성**
+- [x] **Step 1: 콘텐츠 로딩 실패 테스트 작성**
 
 `src/__tests__/lib/content.test.ts` 생성:
 
@@ -120,7 +120,7 @@ describe("searchContent", () => {
 });
 ```
 
-- [ ] **Step 2: 테스트 실행하여 실패 확인**
+- [x] **Step 2: 테스트 실행하여 실패 확인**
 
 ```bash
 npm test
@@ -128,7 +128,7 @@ npm test
 
 기대 결과: 모든 테스트 FAIL (함수가 정의되지 않음).
 
-- [ ] **Step 3: 콘텐츠 로딩 유틸리티 구현**
+- [x] **Step 3: 콘텐츠 로딩 유틸리티 구현**
 
 `src/lib/content.ts` 생성 (서버 전용, `fs` 사용):
 
@@ -215,7 +215,7 @@ export function searchContent(
 }
 ```
 
-- [ ] **Step 4: 테스트 실행하여 통과 확인**
+- [x] **Step 4: 테스트 실행하여 통과 확인**
 
 ```bash
 npm test

@@ -21,7 +21,9 @@
 /build
 
 # IDE
-.idea/
+.idea/*
+!.idea/modules.xml
+!.idea/sql-tuning-note.iml
 
 # misc
 .DS_Store

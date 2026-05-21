@@ -13,7 +13,7 @@
 - 생성: `src/components/SearchBar.tsx`
 - 생성: `src/components/ContentList.tsx`
 
-- [ ] **Step 1: Sidebar 컴포넌트 생성**
+- [x] **Step 1: Sidebar 컴포넌트 생성**
 
 `src/components/Sidebar.tsx` 생성:
 
@@ -78,7 +78,7 @@ export default function Sidebar({
 }
 ```
 
-- [ ] **Step 2: DifficultyFilter 컴포넌트 생성**
+- [x] **Step 2: DifficultyFilter 컴포넌트 생성**
 
 `src/components/DifficultyFilter.tsx` 생성:
 
@@ -95,7 +95,7 @@ interface DifficultyFilterProps {
 
 const difficulties: Difficulty[] = ["beginner", "intermediate", "advanced"];
 
-const difficultyColors = {
+const difficultyToggleColors = {
   beginner: {
     active: "bg-green-100 text-green-800 border-green-300",
     inactive: "border-gray-200 text-gray-500 hover:border-gray-300",
@@ -133,8 +133,8 @@ export default function DifficultyFilter({
             onClick={() => toggle(d)}
             className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors ${
               isActive
-                ? difficultyColors[d].active
-                : difficultyColors[d].inactive
+                ? difficultyToggleColors[d].active
+                : difficultyToggleColors[d].inactive
             }`}
           >
             {dictionary.filter[d]}
@@ -146,7 +146,7 @@ export default function DifficultyFilter({
 }
 ```
 
-- [ ] **Step 3: SearchBar 컴포넌트 생성**
+- [x] **Step 3: SearchBar 컴포넌트 생성**
 
 `src/components/SearchBar.tsx` 생성:
 
@@ -178,7 +178,7 @@ export default function SearchBar({
 }
 ```
 
-- [ ] **Step 4: ContentList 클라이언트 컴포넌트 생성**
+- [x] **Step 4: ContentList 클라이언트 컴포넌트 생성**
 
 `src/components/ContentList.tsx` 생성:
 
@@ -245,18 +245,16 @@ export default function ContentList({
 }
 ```
 
-- [ ] **Step 5: 사이드바를 포함한 Notes 레이아웃 생성**
+- [x] **Step 5: 사이드바를 포함한 Notes 레이아웃 생성**
 
 `src/app/[locale]/notes/[database]/layout.tsx` 생성:
 
 ```tsx
 import { notFound } from "next/navigation";
-import { getDictionary, isValidLocale } from "@/lib/i18n";
+import { getDictionary, isValidLocale, isValidDatabase } from "@/lib/i18n";
 import { getAllContent } from "@/lib/content";
 import Sidebar from "@/components/Sidebar";
 import type { Locale } from "@/lib/types";
-
-const validDatabases = ["mysql", "postgresql"];
 
 export default async function NotesLayout({
   children,
@@ -267,7 +265,7 @@ export default async function NotesLayout({
 }) {
   const { locale, database } = await params;
 
-  if (!isValidLocale(locale) || !validDatabases.includes(database)) {
+  if (!isValidLocale(locale) || !isValidDatabase(database)) {
     notFound();
   }
 
@@ -288,7 +286,7 @@ export default async function NotesLayout({
 }
 ```
 
-- [ ] **Step 6: 콘텐츠 목록 페이지 생성**
+- [x] **Step 6: 콘텐츠 목록 페이지 생성**
 
 `src/app/[locale]/notes/[database]/page.tsx` 생성:
 
@@ -303,6 +301,8 @@ export function generateStaticParams() {
   return [
     { locale: "ko", database: "mysql" },
     { locale: "en", database: "mysql" },
+    { locale: "ko", database: "postgresql" },
+    { locale: "en", database: "postgresql" },
   ];
 }
 
@@ -332,7 +332,7 @@ export default async function BrowsePage({
 }
 ```
 
-- [ ] **Step 7: 브라우저에서 확인**
+- [x] **Step 7: 브라우저에서 확인**
 
 ```bash
 npm run dev
@@ -349,4 +349,17 @@ npm run dev
 - /en/notes/mysql 에서 영어 버전이 정상 표시됨
 
 개발 서버를 중지한다.
+
+- [x] **Step 8: ContentList 컴포넌트 테스트 작성**
+
+`src/__tests__/components/ContentList.test.tsx` 생성:
+
+- `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event` 설치
+- ContentList 렌더링/인터랙션 테스트 6건:
+  - 모든 콘텐츠 카드를 렌더링한다
+  - 검색어 입력 시 일치하는 콘텐츠만 표시한다
+  - 난이도 필터 클릭 시 해당 난이도 콘텐츠만 표시한다
+  - 검색 결과가 없을 때 안내 메시지를 표시한다
+  - 난이도 필터와 검색을 조합하여 필터링한다
+  - 난이도 필터를 다시 클릭하면 해제된다
 

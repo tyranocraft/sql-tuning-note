@@ -23,7 +23,7 @@
 - `locale as Locale` 타입 단언 제거 (layout에서 검증 후 typed locale을 context로 전달)
 
 **주의:**
-- `src/app/[locale]/notes/[database]/page.tsx`의 `!validDatabases.includes(database)` 검증은 locale이 아닌 database 파라미터 검증이므로 유지해야 한다.
+- `src/app/[locale]/notes/[database]/layout.tsx`의 `isValidDatabase(database)` 검증은 locale이 아닌 database 파라미터 검증이므로 유지해야 한다. (`isValidDatabase`는 `src/lib/i18n.ts`에 정의된 타입 가드 함수)
 - `generateMetadata` 함수는 layout context에 접근할 수 없으므로 (서버 함수), 각 page의 `generateMetadata` 내 `isValidLocale` + `getDictionary`는 유지한다.
 - Task 8에서 생성한 `DictionaryProvider`는 MDX 클라이언트 컴포넌트(Practice, Quiz)용이다. 이를 layout 레벨로 끌어올려 범용화하되, 기존 MDX 컴포넌트 동작이 깨지지 않도록 한다.
 
@@ -145,16 +145,13 @@ export default async function LandingPage({
 }
 ```
 
-**`src/app/[locale]/notes/[database]/page.tsx`** — `isValidLocale` 제거, `validDatabases` 검증은 유지:
+**`src/app/[locale]/notes/[database]/page.tsx`** — `isValidLocale` 제거. database 검증은 `layout.tsx`에서 `isValidDatabase(database)`로 이미 처리하므로 page.tsx에서는 별도 검증 불필요:
 
 ```tsx
 // 변경 전
 if (!isValidLocale(locale)) notFound();
 
-// 변경 후: locale 검증 줄 제거. database 검증만 유지
-if (!validDatabases.includes(database)) {
-  notFound();
-}
+// 변경 후: 이 줄 제거. database 검증은 layout.tsx에서 isValidDatabase()로 처리
 ```
 
 **`src/app/[locale]/notes/[database]/[slug]/page.tsx`** — `isValidLocale` 제거:

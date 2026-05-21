@@ -10,7 +10,7 @@
 - 생성: `content/mysql/en/beginner/index-basics.mdx`
 - 생성: `content/mysql/en/beginner/explain-intro.mdx`
 
-- [ ] **Step 1: TypeScript 타입 정의**
+- [x] **Step 1: TypeScript 타입 정의**
 
 `src/lib/types.ts` 생성:
 
@@ -86,7 +86,7 @@ export interface Dictionary {
 }
 ```
 
-- [ ] **Step 2: 한국어 샘플 콘텐츠 생성 — index-basics**
+- [x] **Step 2: 한국어 샘플 콘텐츠 생성 — index-basics**
 
 `content/mysql/ko/beginner/index-basics.mdx` 생성:
 
@@ -177,7 +177,7 @@ CREATE INDEX idx_orders_customer_date ON orders (customer_id, order_date DESC);
 </Quiz>
 ```
 
-- [ ] **Step 3: 한국어 샘플 콘텐츠 생성 — explain-intro**
+- [x] **Step 3: 한국어 샘플 콘텐츠 생성 — explain-intro**
 
 `content/mysql/ko/beginner/explain-intro.mdx` 생성:
 
@@ -277,7 +277,7 @@ CREATE INDEX idx_products_category_price ON products (category, price);
 </Quiz>
 ```
 
-- [ ] **Step 4: 영어 샘플 콘텐츠 생성 — index-basics**
+- [x] **Step 4: 영어 샘플 콘텐츠 생성 — index-basics**
 
 `content/mysql/en/beginner/index-basics.mdx` 생성:
 
@@ -367,7 +367,7 @@ This composite index filters by `customer_id` and returns results already sorted
 </Quiz>
 ```
 
-- [ ] **Step 5: 영어 샘플 콘텐츠 생성 — explain-intro**
+- [x] **Step 5: 영어 샘플 콘텐츠 생성 — explain-intro**
 
 `content/mysql/en/beginner/explain-intro.mdx` 생성:
 

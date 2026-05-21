@@ -8,7 +8,7 @@
 - 생성: `vitest.config.ts`
 - 수정: `package.json` (테스트 스크립트 추가)
 
-- [ ] **Step 1: Next.js 프로젝트 생성**
+- [x] **Step 1: Next.js 프로젝트 생성**
 
 프로젝트 디렉토리에서 실행:
 
@@ -19,7 +19,7 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 프롬프트 응답:
 - Would you like to use Turbopack? → Yes
 
-- [ ] **Step 2: 앱 실행 확인**
+- [x] **Step 2: 앱 실행 확인**
 
 ```bash
 npm run dev
@@ -28,19 +28,19 @@ npm run dev
 http://localhost:3000 을 열어 기본 Next.js 페이지가 로드되는지 확인한다.
 개발 서버를 중지한다 (Ctrl+C).
 
-- [ ] **Step 3: 콘텐츠 관련 의존성 설치**
+- [x] **Step 3: 콘텐츠 관련 의존성 설치**
 
 ```bash
 npm install gray-matter next-mdx-remote rehype-pretty-code shiki
 ```
 
-- [ ] **Step 4: 테스트 관련 의존성 설치**
+- [x] **Step 4: 테스트 관련 의존성 설치**
 
 ```bash
 npm install -D vitest @vitejs/plugin-react jsdom
 ```
 
-- [ ] **Step 5: Vitest 설정 파일 생성**
+- [x] **Step 5: Vitest 설정 파일 생성**
 
 `vitest.config.ts` 생성:
 
@@ -62,7 +62,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 6: package.json에 테스트 스크립트 추가**
+- [x] **Step 6: package.json에 테스트 스크립트 추가**
 
 `package.json`의 `"scripts"` 섹션에 추가:
 
@@ -71,7 +71,7 @@ export default defineConfig({
 "test:watch": "vitest"
 ```
 
-- [ ] **Step 7: 디렉토리 구조 생성**
+- [x] **Step 7: 디렉토리 구조 생성**
 
 ```bash
 mkdir -p content/mysql/ko/beginner
@@ -86,7 +86,7 @@ mkdir -p src/dictionaries
 mkdir -p src/__tests__/lib
 ```
 
-- [ ] **Step 8: 기본 Next.js 파일 정리**
+- [x] **Step 8: 기본 Next.js 파일 정리**
 
 `src/app/page.tsx`를 최소한의 플레이스홀더로 교체:
 

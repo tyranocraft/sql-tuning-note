@@ -1,0 +1,43 @@
+{
+  "site": {
+    "title": "SQL Tuning Note",
+    "description": "SQL 쿼리 성능 개선을 위한 이론과 실습"
+  },
+  "nav": {
+    "home": "홈",
+    "notes": "학습하기"
+  },
+  "landing": {
+    "hero": {
+      "title": "SQL 쿼리 성능,\n제대로 이해하고 개선하자",
+      "subtitle": "인덱스 동작원리부터 실행계획 분석까지, 실무에서 바로 쓰는 SQL 튜닝 가이드",
+      "cta": "학습 시작하기"
+    },
+    "difficulty": {
+      "beginner": "초급",
+      "intermediate": "중급",
+      "advanced": "고급"
+    }
+  },
+  "content": {
+    "prerequisites": "선수 지식",
+    "nextSteps": "다음 단계",
+    "showHint": "힌트 보기",
+    "hideHint": "힌트 접기",
+    "showAnswer": "정답 보기",
+    "hideAnswer": "정답 접기",
+    "checkAnswer": "정답 확인",
+    "correct": "정답",
+    "incorrect": "오답"
+  },
+  "search": {
+    "placeholder": "주제 검색...",
+    "noResults": "검색 결과가 없습니다"
+  },
+  "filter": {
+    "all": "전체",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "site": {
+    "title": "SQL Tuning Note",
+    "description": "Theory and practice for SQL query performance optimization"
+  },
+  "nav": {
+    "home": "Home",
+    "notes": "Learn"
+  },
+  "landing": {
+    "hero": {
+      "title": "SQL Query Performance,\nUnderstand and Optimize",
+      "subtitle": "From index fundamentals to execution plan analysis — a practical SQL tuning guide",
+      "cta": "Start Learning"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "content": {
+    "prerequisites": "Prerequisites",
+    "nextSteps": "Next Steps",
+    "showHint": "Show Hint",
+    "hideHint": "Hide Hint",
+    "showAnswer": "Show Answer",
+    "hideAnswer": "Hide Answer",
+    "checkAnswer": "Check Answer",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "search": {
+    "placeholder": "Search topics...",
+    "noResults": "No results found"
+  },
+  "filter": {
+    "all": "All",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  }
+}

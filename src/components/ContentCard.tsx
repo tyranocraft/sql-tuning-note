@@ -7,7 +7,7 @@ interface ContentCardProps {
   dictionary: Dictionary;
 }
 
-const difficultyColors = {
+const difficultyBadgeColors = {
   beginner: "bg-green-50 text-green-700 border-green-200",
   intermediate: "bg-yellow-50 text-yellow-700 border-yellow-200",
   advanced: "bg-red-50 text-red-700 border-red-200",
@@ -25,7 +25,7 @@ export default function ContentCard({
     >
       <div className="mb-2 flex items-center gap-2">
         <span
-          className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${difficultyColors[content.difficulty]}`}
+          className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${difficultyBadgeColors[content.difficulty]}`}
         >
           {dictionary.filter[content.difficulty]}
         </span>

@@ -1,0 +1,91 @@
+---
+title: "Reading EXPLAIN Output"
+slug: "explain-intro"
+database: "mysql"
+difficulty: "beginner"
+category: "explain"
+tags: ["explain", "execution-plan", "query-optimization"]
+prerequisites: ["index-basics"]
+nextSteps: []
+author: ""
+createdAt: "2026-05-19"
+updatedAt: "2026-05-19"
+---
+
+## What is EXPLAIN?
+
+`EXPLAIN` shows you MySQL's execution plan — how it intends to execute a query. The first step in query tuning is understanding the current state through EXPLAIN.
+
+```sql
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';
+```
+
+## Key Columns
+
+| Column | Meaning | Watch For |
+|--------|---------|-----------|
+| `type` | Access method | `ALL` (full scan) needs improvement |
+| `key` | Index used | `NULL` means no index used |
+| `rows` | Estimated rows examined | Higher = less efficient |
+| `Extra` | Additional info | `Using filesort`, `Using temporary` need attention |
+
+## Access Types (Best to Worst)
+
+1. **const** — Single row via PRIMARY KEY or UNIQUE index
+2. **eq_ref** — One row per JOIN via PRIMARY KEY/UNIQUE
+3. **ref** — Multiple rows via non-unique index
+4. **range** — Index range scan
+5. **index** — Full index scan (better than table scan, still inefficient)
+6. **ALL** — Full table scan (worst case)
+
+## EXPLAIN ANALYZE
+
+Available since MySQL 8.0.18, `EXPLAIN ANALYZE` shows actual execution times:
+
+```sql
+EXPLAIN ANALYZE
+SELECT * FROM users WHERE email = 'test@example.com';
+```
+
+<Practice>
+<Problem>
+Analyze the following EXPLAIN output and suggest improvements.
+
+```
++----+------+---------------+------+------+----------+-------------+
+| id | type | possible_keys | key  | rows | filtered | Extra       |
++----+------+---------------+------+------+----------+-------------+
+|  1 | ALL  | NULL          | NULL | 5000 |    10.00 | Using where |
++----+------+---------------+------+------+----------+-------------+
+```
+
+Query:
+```sql
+SELECT * FROM products WHERE category = 'electronics' AND price > 100;
+```
+</Problem>
+<Hint>
+What does `type: ALL` and `key: NULL` tell you? Notice that all 5000 rows are being scanned.
+</Hint>
+<Answer>
+**Problem:** A Full Table Scan (`type: ALL`) is occurring. No index is being used (`key: NULL`), forcing MySQL to read all 5000 rows.
+
+**Solution:**
+```sql
+CREATE INDEX idx_products_category_price ON products (category, price);
+```
+
+A composite index with `category` as the leading column and `price` as the secondary column enables:
+- Index lookup on `category = 'electronics'`
+- Index range scan on `price > 100`
+
+After adding this index, `type` should change to `range` and `rows` should decrease significantly.
+</Answer>
+</Practice>
+
+<Quiz question="In EXPLAIN output, what does type 'ALL' indicate?">
+<Option>An index range scan</Option>
+<Option>A single row lookup via PRIMARY KEY</Option>
+<Option correct>A full table scan (reads every row)</Option>
+<Option>A full index scan</Option>
+</Quiz>

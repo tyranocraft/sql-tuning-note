@@ -1,0 +1,83 @@
+---
+title: "How Indexes Work"
+slug: "index-basics"
+database: "mysql"
+difficulty: "beginner"
+category: "index"
+tags: ["b-tree", "index", "performance"]
+prerequisites: []
+nextSteps: ["explain-intro"]
+author: ""
+createdAt: "2026-05-19"
+updatedAt: "2026-05-19"
+---
+
+## What is an Index?
+
+An index is a data structure that allows the database to quickly locate specific rows in a table. Think of it like a book's index — instead of reading every page, you look up the topic and jump to the right page.
+
+Without an index, MySQL must read every row from start to finish. This is called a **Full Table Scan**.
+
+## B-Tree Index
+
+The default index structure in MySQL InnoDB is **B+Tree**.
+
+```sql
+CREATE INDEX idx_users_email ON users (email);
+```
+
+Key properties of B+Tree:
+- All leaf nodes are at the same depth
+- Leaf nodes are connected via a linked list, making range scans efficient
+- Search time from root to leaf is O(log N)
+
+## When Indexes Are Effective
+
+| Scenario | Example |
+|----------|---------|
+| Equality | `WHERE email = 'test@example.com'` |
+| Range | `WHERE created_at > '2026-01-01'` |
+| Sorting | `ORDER BY created_at DESC` |
+| Grouping | `GROUP BY category` |
+
+## When Indexes Are Ineffective
+
+```sql
+-- Applying a function to a column prevents index usage
+SELECT * FROM users WHERE YEAR(created_at) = 2026;
+
+-- Rewrite as a range condition to utilize the index
+SELECT * FROM users
+WHERE created_at >= '2026-01-01'
+  AND created_at < '2027-01-01';
+```
+
+<Practice>
+<Problem>
+Given an `orders` table with columns `customer_id`, `order_date`, and `total_amount`, what index would improve the following query?
+
+```sql
+SELECT * FROM orders
+WHERE customer_id = 123
+ORDER BY order_date DESC
+LIMIT 10;
+```
+</Problem>
+<Hint>
+Consider both the WHERE clause and ORDER BY clause together. A composite index can handle both filtering and sorting.
+</Hint>
+<Answer>
+```sql
+CREATE INDEX idx_orders_customer_date ON orders (customer_id, order_date DESC);
+```
+
+This composite index filters by `customer_id` and returns results already sorted by `order_date DESC`, eliminating the need for a separate filesort operation.
+</Answer>
+</Practice>
+
+<Quiz question="What is the default index data structure in MySQL InnoDB?">
+<Option>Hash Table</Option>
+<Option correct>B+Tree</Option>
+<Option>Red-Black Tree</Option>
+<Option>Skip List</Option>
+</Quiz>

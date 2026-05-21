@@ -1,0 +1,84 @@
+---
+title: "인덱스 동작원리"
+slug: "index-basics"
+database: "mysql"
+difficulty: "beginner"
+category: "index"
+tags: ["b-tree", "index", "performance"]
+prerequisites: []
+nextSteps: ["explain-intro"]
+author: ""
+createdAt: "2026-05-19"
+updatedAt: "2026-05-19"
+---
+
+## 인덱스란?
+
+인덱스는 데이터베이스 테이블에서 원하는 데이터를 빠르게 찾기 위한 자료구조다. 책의 목차(Index)와 같은 역할을 한다.
+
+인덱스가 없으면 MySQL은 테이블의 모든 행을 처음부터 끝까지 순차적으로 읽어야 한다. 이를 **Full Table Scan**이라 한다.
+
+## B-Tree 인덱스
+
+MySQL InnoDB 엔진의 기본 인덱스 구조는 **B+Tree**다.
+
+```sql
+CREATE INDEX idx_users_email ON users (email);
+```
+
+B+Tree의 핵심 특성:
+- 모든 리프 노드가 같은 깊이에 위치한다
+- 리프 노드끼리 링크드 리스트로 연결되어 범위 검색에 유리하다
+- 루트에서 리프까지의 탐색 시간이 O(log N)이다
+
+## 인덱스가 효과적인 경우
+
+| 상황 | 예시 |
+|------|------|
+| 등호 조건 | `WHERE email = 'test@example.com'` |
+| 범위 조건 | `WHERE created_at > '2026-01-01'` |
+| 정렬 | `ORDER BY created_at DESC` |
+| 그룹핑 | `GROUP BY category` |
+
+## 인덱스가 비효과적인 경우
+
+```sql
+-- 컬럼에 함수를 적용하면 인덱스를 사용할 수 없다
+SELECT * FROM users WHERE YEAR(created_at) = 2026;
+
+-- 대신 범위 조건으로 변환하면 인덱스를 활용할 수 있다
+SELECT * FROM users
+WHERE created_at >= '2026-01-01'
+  AND created_at < '2027-01-01';
+```
+
+<Practice>
+<Problem>
+`orders` 테이블에 `customer_id`, `order_date`, `total_amount` 컬럼이 있다.
+다음 쿼리의 성능을 개선하려면 어떤 인덱스를 생성해야 할까?
+
+```sql
+SELECT * FROM orders
+WHERE customer_id = 123
+ORDER BY order_date DESC
+LIMIT 10;
+```
+</Problem>
+<Hint>
+WHERE 절과 ORDER BY 절에 사용된 컬럼을 함께 고려하자. 복합 인덱스(Composite Index)를 사용하면 정렬까지 인덱스로 처리할 수 있다.
+</Hint>
+<Answer>
+```sql
+CREATE INDEX idx_orders_customer_date ON orders (customer_id, order_date DESC);
+```
+
+`customer_id`로 필터링한 후 `order_date` 역순으로 정렬된 결과를 인덱스만으로 얻을 수 있다. 이렇게 하면 별도의 filesort 없이 인덱스 순서대로 읽기만 하면 된다.
+</Answer>
+</Practice>
+
+<Quiz question="MySQL InnoDB의 기본 인덱스 자료구조는?">
+<Option>Hash Table</Option>
+<Option correct>B+Tree</Option>
+<Option>Red-Black Tree</Option>
+<Option>Skip List</Option>
+</Quiz>

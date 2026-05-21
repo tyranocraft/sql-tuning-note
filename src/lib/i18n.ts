@@ -1,4 +1,4 @@
-import type { Locale, Dictionary } from "./types";
+import type { Database, Locale, Dictionary } from "./types";
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   ko: () => import("@/dictionaries/ko.json").then((m) => m.default as Dictionary),
@@ -14,4 +14,10 @@ export function getDictionary(locale: Locale): Promise<Dictionary> {
 
 export function isValidLocale(value: string): value is Locale {
   return locales.includes(value as Locale);
+}
+
+export const databases: Database[] = ["mysql", "postgresql"];
+
+export function isValidDatabase(value: string): value is Database {
+  return databases.includes(value as Database);
 }

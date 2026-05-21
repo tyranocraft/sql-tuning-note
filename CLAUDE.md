@@ -10,6 +10,8 @@
 - Task별 작업은 `master` 브랜치에서 별도 feature 브랜치를 생성한 뒤 진행한다. 브랜치 이름은 `feat/{task-name}` 형식이며, `{task-name}`은 `docs/plans/` 하위 Task 문서 파일명에서 번호 접두사를 제거한 값이다.
   - 예: `docs/plans/09-seo-deploy.md` → `feat/seo-deploy`
 - Task 문서의 각 Step 완료 시, 문서에 명시된 작업내용과 실제 결과물(생성된 파일, 코드 내용 등)을 비교하여 일치하면 해당 Step의 체크박스를 `[x]`로 변경한다.
+- Vitest 테스트 작성 시, `describe`와 `it`의 설명 문자열은 한글로 작성한다. `describe`는 테스트 대상 함수명/모듈명을 그대로 사용하되, `it`의 설명은 `"mysql/ko의 모든 콘텐츠 메타데이터를 반환한다"`처럼 행위를 한글로 서술한다.
+- 테스트 코드는 given-when-then 패턴으로 작성한다. 각 영역은 `// given`, `// when`, `// then` 주석으로 구분한다. given에는 테스트 전제 조건(입력값, 사전 상태), when에는 실행할 동작, then에는 기대 결과 검증을 배치한다.
 
 ## 문서 참조
 

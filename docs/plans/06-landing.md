@@ -9,7 +9,7 @@
 - 수정: `src/app/[locale]/page.tsx`
 - 생성: `src/components/ContentCard.tsx`
 
-- [ ] **Step 1: ContentCard 컴포넌트 생성**
+- [x] **Step 1: ContentCard 컴포넌트 생성**
 
 `src/components/ContentCard.tsx` 생성:
 
@@ -60,14 +60,13 @@ export default function ContentCard({
 }
 ```
 
-- [ ] **Step 2: 랜딩 페이지 구현**
+- [x] **Step 2: 랜딩 페이지 구현**
 
 `src/app/[locale]/page.tsx` 교체:
 
 ```tsx
 import Link from "next/link";
-import { getDictionary } from "@/lib/i18n";
-import { isValidLocale } from "@/lib/i18n";
+import { getDictionary, isValidLocale } from "@/lib/i18n";
 import { getAllContent } from "@/lib/content";
 import ContentCard from "@/components/ContentCard";
 import type { Locale } from "@/lib/types";
@@ -127,7 +126,7 @@ export default async function LandingPage({
 }
 ```
 
-- [ ] **Step 3: 브라우저에서 확인**
+- [x] **Step 3: 브라우저에서 확인**
 
 ```bash
 npm run dev

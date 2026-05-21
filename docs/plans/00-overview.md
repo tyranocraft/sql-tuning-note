@@ -83,6 +83,7 @@ sql-tuning-note/
 | [07-browse.md](07-browse.md) | 콘텐츠 목록 페이지 | Task 3, 5 |
 | [08-detail.md](08-detail.md) | 콘텐츠 상세 페이지 (MDX, 실전문제, 퀴즈) | Task 3, 4, 7 |
 | [09-seo-deploy.md](09-seo-deploy.md) | SEO 및 배포 | Task 5~8 전체 |
+| [10-refactor-locale-guard.md](10-refactor-locale-guard.md) | locale 검증 중복 제거 리팩터링 | Task 9 |
 
 ---
 

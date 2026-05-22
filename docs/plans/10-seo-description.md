@@ -1,4 +1,4 @@
-# Task 11: 콘텐츠 상세 페이지 SEO description 개선
+# Task 10: 콘텐츠 상세 페이지 SEO description 개선
 
 > **공통 컨텍스트:** [00-overview.md](00-overview.md)를 먼저 읽을 것.
 > **의존성:**

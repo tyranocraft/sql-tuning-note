@@ -8,13 +8,16 @@
 
 **파일:**
 - 생성: `src/components/DictionaryProvider.tsx`
+- 생성: `src/components/ToggleSection.tsx` (Hint/Answer 공통 토글 컴포넌트)
+- 생성: `src/components/DifficultyBadge.tsx` (난이도 배지 공통 컴포넌트)
 - 생성: `src/components/Practice.tsx`
 - 생성: `src/components/Quiz.tsx`
 - 생성: `src/components/MDXComponents.tsx`
 - 생성: `src/app/[locale]/notes/[database]/[slug]/page.tsx`
 - 수정: `src/components/Sidebar.tsx` (클라이언트 컴포넌트로 변경)
+- 수정: `src/components/ContentCard.tsx` (`DifficultyBadge` 공통 컴포넌트 적용)
 
-- [ ] **Step 1: DictionaryProvider 컨텍스트 생성**
+- [x] **Step 1: DictionaryProvider 컨텍스트 생성**
 
 MDX 내부의 클라이언트 컴포넌트(Practice, Quiz)에서 사전 문자열에 접근할 수 있도록 React Context를 생성한다.
 
@@ -51,15 +54,55 @@ export function useDictionary(): Dictionary {
 }
 ```
 
-- [ ] **Step 2: Practice 토글 컴포넌트 생성**
+- [x] **Step 2: ToggleSection 공통 컴포넌트 및 Practice 토글 컴포넌트 생성**
+
+`Hint`와 `Answer`는 동일한 토글 패턴(useState + 버튼 + children 표시)을 공유하므로 `ToggleSection` 공통 컴포넌트로 분리한다.
+
+`src/components/ToggleSection.tsx` 생성:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+export default function ToggleSection({
+  showLabel,
+  hideLabel,
+  buttonClassName,
+  className,
+  children,
+}: {
+  showLabel: string;
+  hideLabel: string;
+  buttonClassName: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className={className}>
+      <button
+        onClick={() => setOpen(!open)}
+        className={`text-sm font-medium ${buttonClassName}`}
+      >
+        {open ? hideLabel : showLabel}
+      </button>
+      {open && (
+        <div className="mt-3 prose prose-sm max-w-none">{children}</div>
+      )}
+    </div>
+  );
+}
+```
 
 `src/components/Practice.tsx` 생성:
 
 ```tsx
 "use client";
 
-import { useState } from "react";
 import { useDictionary } from "./DictionaryProvider";
+import ToggleSection from "./ToggleSection";
 
 export function Practice({ children }: { children: React.ReactNode }) {
   return (
@@ -78,49 +121,37 @@ export function Problem({ children }: { children: React.ReactNode }) {
 }
 
 export function Hint({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
   const dict = useDictionary();
 
   return (
-    <div className="border-b border-gray-200 px-5 py-3">
-      <button
-        onClick={() => setOpen(!open)}
-        className="text-sm font-medium text-blue-600 hover:text-blue-800"
-      >
-        {open ? dict.content.hideHint : dict.content.showHint}
-      </button>
-      {open && (
-        <div className="mt-3 prose prose-sm max-w-none text-gray-600">
-          {children}
-        </div>
-      )}
-    </div>
+    <ToggleSection
+      showLabel={dict.content.showHint}
+      hideLabel={dict.content.hideHint}
+      buttonClassName="text-blue-600 hover:text-blue-800"
+      className="border-b border-gray-200 px-5 py-3"
+    >
+      <div className="text-gray-600">{children}</div>
+    </ToggleSection>
   );
 }
 
 export function Answer({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
   const dict = useDictionary();
 
   return (
-    <div className="px-5 py-3">
-      <button
-        onClick={() => setOpen(!open)}
-        className="text-sm font-medium text-green-600 hover:text-green-800"
-      >
-        {open ? dict.content.hideAnswer : dict.content.showAnswer}
-      </button>
-      {open && (
-        <div className="mt-3 prose prose-sm max-w-none text-gray-700">
-          {children}
-        </div>
-      )}
-    </div>
+    <ToggleSection
+      showLabel={dict.content.showAnswer}
+      hideLabel={dict.content.hideAnswer}
+      buttonClassName="text-green-600 hover:text-green-800"
+      className="px-5 py-3"
+    >
+      <div className="text-gray-700">{children}</div>
+    </ToggleSection>
   );
 }
 ```
 
-- [ ] **Step 3: Quiz 컴포넌트 생성**
+- [x] **Step 3: Quiz 컴포넌트 생성**
 
 `src/components/Quiz.tsx` 생성:
 
@@ -221,7 +252,7 @@ export function Option({
 
 `index` prop은 MDXComponents 매핑에서 주입된다 (Step 4 참고).
 
-- [ ] **Step 4: MDX 컴포넌트 매핑 생성**
+- [x] **Step 4: MDX 컴포넌트 매핑 생성**
 
 `src/components/MDXComponents.tsx` 생성:
 
@@ -257,32 +288,77 @@ export const mdxComponents = {
 };
 ```
 
-- [ ] **Step 5: 콘텐츠 상세 페이지 생성**
+- [x] **Step 5: DifficultyBadge 공통 컴포넌트 및 콘텐츠 상세 페이지 생성**
+
+난이도 배지는 `ContentCard`와 상세 페이지에서 공통으로 사용되므로 `DifficultyBadge` 공통 컴포넌트로 분리한다.
+
+`src/components/DifficultyBadge.tsx` 생성:
+
+```tsx
+import type { Difficulty, Dictionary } from "@/lib/types";
+
+const coloredStyles: Record<Difficulty, string> = {
+  beginner: "bg-green-50 text-green-700 border-green-200",
+  intermediate: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  advanced: "bg-red-50 text-red-700 border-red-200",
+};
+
+const neutralStyle = "bg-gray-100 text-gray-600 border-gray-100";
+
+export default function DifficultyBadge({
+  difficulty,
+  dictionary,
+  colored = false,
+}: {
+  difficulty: Difficulty;
+  dictionary: Dictionary;
+  colored?: boolean;
+}) {
+  return (
+    <span
+      className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+        colored ? coloredStyles[difficulty] : neutralStyle
+      }`}
+    >
+      {dictionary.filter[difficulty]}
+    </span>
+  );
+}
+```
+
+`src/components/ContentCard.tsx`에서 기존 `difficultyBadgeColors` 상수와 인라인 `<span>`을 `DifficultyBadge` 컴포넌트로 교체한다.
 
 `src/app/[locale]/notes/[database]/[slug]/page.tsx` 생성:
+
+- `generateStaticParams`에서 `locales`, `databases` 상수를 사용하여 mysql과 postgresql 모두 정적 경로를 생성한다.
+- `prerequisites`, `nextSteps` 배열에서 `.filter((c): c is ContentMeta => c !== undefined)` 타입 가드를 사용하여 non-null assertion(`!`)을 제거한다.
+- 난이도 배지에 `DifficultyBadge` 공통 컴포넌트를 사용한다.
 
 ```tsx
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
-import { isValidLocale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, getDictionary, locales, databases } from "@/lib/i18n";
 import { getContentBySlug, getAllContent } from "@/lib/content";
 import { mdxComponents } from "@/components/MDXComponents";
 import { DictionaryProvider } from "@/components/DictionaryProvider";
-import type { Locale } from "@/lib/types";
+import DifficultyBadge from "@/components/DifficultyBadge";
+import type { ContentMeta, Locale } from "@/lib/types";
 
 export function generateStaticParams() {
   const params: { locale: string; database: string; slug: string }[] = [];
 
-  for (const locale of ["ko", "en"]) {
-    const contents = getAllContent("mysql", locale);
-    for (const content of contents) {
-      params.push({
-        locale,
-        database: content.database,
-        slug: content.slug,
-      });
+  for (const locale of locales) {
+    for (const database of databases) {
+      const contents = getAllContent(database, locale);
+      for (const content of contents) {
+        params.push({
+          locale,
+          database: content.database,
+          slug: content.slug,
+        });
+      }
     }
   }
 
@@ -305,20 +381,22 @@ export default async function ContentDetailPage({
 
   const prerequisites = content.prerequisites
     .map((preSlug) => allContent.find((c) => c.slug === preSlug))
-    .filter(Boolean);
+    .filter((c): c is ContentMeta => c !== undefined);
 
   const nextSteps = content.nextSteps
     .map((nextSlug) => allContent.find((c) => c.slug === nextSlug))
-    .filter(Boolean);
+    .filter((c): c is ContentMeta => c !== undefined);
 
   return (
     <article className="mx-auto max-w-3xl">
       {/* 콘텐츠 헤더 */}
       <div className="mb-8">
         <div className="mb-3 flex items-center gap-2">
-          <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-            {dictionary.filter[content.difficulty]}
-          </span>
+          <DifficultyBadge
+            difficulty={content.difficulty}
+            dictionary={dictionary}
+            colored
+          />
           <span className="text-xs text-gray-400">{content.category}</span>
         </div>
         <h1 className="text-3xl font-bold text-gray-900">{content.title}</h1>
@@ -333,18 +411,18 @@ export default async function ContentDetailPage({
           <div className="flex flex-wrap gap-2">
             {prerequisites.map((pre) => (
               <Link
-                key={pre!.slug}
-                href={`/${locale}/notes/${database}/${pre!.slug}`}
+                key={pre.slug}
+                href={`/${locale}/notes/${database}/${pre.slug}`}
                 className="text-sm text-blue-600 underline hover:text-blue-800"
               >
-                {pre!.title}
+                {pre.title}
               </Link>
             ))}
           </div>
         </div>
       )}
 
-      {/* MDX 본문 — DictionaryProvider로 감싸서 Practice/Quiz 컴포넌트에서 사전 접근 가능 */}
+      {/* MDX 본문 */}
       <DictionaryProvider dictionary={dictionary}>
         <div className="prose prose-gray max-w-none prose-headings:text-gray-900 prose-code:text-gray-800">
           <MDXRemote
@@ -370,11 +448,11 @@ export default async function ContentDetailPage({
           <div className="flex flex-wrap gap-2">
             {nextSteps.map((next) => (
               <Link
-                key={next!.slug}
-                href={`/${locale}/notes/${database}/${next!.slug}`}
+                key={next.slug}
+                href={`/${locale}/notes/${database}/${next.slug}`}
                 className="text-sm text-gray-600 underline hover:text-gray-900"
               >
-                {next!.title}
+                {next.title}
               </Link>
             ))}
           </div>
@@ -385,11 +463,13 @@ export default async function ContentDetailPage({
 }
 ```
 
-- [ ] **Step 6: Sidebar에 현재 슬러그 하이라이트 기능 추가**
+- [x] **Step 6: Sidebar에 현재 슬러그 하이라이트 기능 추가**
 
 Sidebar는 현재 보고 있는 토픽을 하이라이트해야 한다. 레이아웃에서는 slug 파라미터에 접근할 수 없으므로, Sidebar를 클라이언트 컴포넌트로 변경하고 `usePathname()`으로 현재 슬러그를 추출한다.
 
 `src/components/Sidebar.tsx`를 아래 내용으로 교체 — `"use client"` 추가 및 `usePathname` 사용:
+
+목록 페이지(`/ko/notes/mysql`)에서 `pathname.split("/").pop()`이 `"mysql"`을 반환하여 의도치 않은 하이라이트가 발생할 수 있으므로, 세그먼트 수로 상세 페이지 여부를 판별한다.
 
 ```tsx
 "use client";
@@ -414,7 +494,9 @@ export default function Sidebar({
   dictionary,
 }: SidebarProps) {
   const pathname = usePathname();
-  const currentSlug = pathname.split("/").pop();
+  const segments = pathname.split("/");
+  // /[locale]/notes/[database]/[slug] → 5 segments
+  const currentSlug = segments.length >= 5 ? segments[4] : undefined;
 
   const grouped = difficultyOrder
     .map((difficulty) => ({
@@ -458,7 +540,7 @@ export default function Sidebar({
 
 인터페이스에서 `currentSlug` prop을 제거한다 (이제 pathname에서 자동으로 추출). 레이아웃에서 Sidebar를 사용하는 곳에서도 `currentSlug` prop 전달이 불필요하다.
 
-- [ ] **Step 7: 브라우저에서 확인**
+- [x] **Step 7: 브라우저에서 확인**
 
 ```bash
 npm run dev

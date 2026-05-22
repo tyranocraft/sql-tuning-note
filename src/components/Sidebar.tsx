@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ContentMeta, Locale, Dictionary, Difficulty } from "@/lib/types";
 
 interface SidebarProps {
@@ -6,7 +9,6 @@ interface SidebarProps {
   locale: Locale;
   database: string;
   dictionary: Dictionary;
-  currentSlug?: string;
 }
 
 const difficultyOrder: Difficulty[] = ["beginner", "intermediate", "advanced"];
@@ -16,8 +18,11 @@ export default function Sidebar({
   locale,
   database,
   dictionary,
-  currentSlug,
 }: SidebarProps) {
+  const pathname = usePathname();
+  const segments = pathname.split("/");
+  const currentSlug = segments.length >= 5 ? segments[4] : undefined;
+
   const grouped = difficultyOrder
     .map((difficulty) => ({
       difficulty,

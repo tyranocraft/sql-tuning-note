@@ -5,17 +5,17 @@
 `{순번}-{키워드}.md` 형식을 사용한다. 순번은 `docs/topics/` 난이도별 토픽 목록의 번호를 따른다.
 
 ```
-docs/contents/beginner/01-explain.md
-docs/contents/beginner/02-select-star.md
-docs/contents/intermediate/01-composite-index.md
-docs/contents/advanced/03-explain-analyze.md
+docs/content-specs/beginner/01-explain.md
+docs/content-specs/beginner/02-select-star.md
+docs/content-specs/intermediate/01-composite-index.md
+docs/content-specs/advanced/03-explain-analyze.md
 ```
 
 파트 분할 시 파일명 뒤에 `-part1`, `-part2`를 붙인다.
 
 ```
-docs/contents/intermediate/01-composite-index-part1.md
-docs/contents/intermediate/01-composite-index-part2.md
+docs/content-specs/intermediate/01-composite-index-part1.md
+docs/content-specs/intermediate/01-composite-index-part2.md
 ```
 
 ## 기본 원칙
@@ -35,6 +35,24 @@ docs/contents/intermediate/01-composite-index-part2.md
 ④ 결과 비교 — 개선된 EXPLAIN 결과 (After)
 ⑤ 실전 문제 — <Practice>, <Quiz> 컴포넌트 활용
 ```
+
+### ②와 ③의 역할 구분
+
+- **② 원인 분석**: 직접 원인 + 관련 이론을 다룬다. "왜 느린지", "왜 인덱스를 못 타는지" 등 분석과 배경 지식이 여기에 속한다.
+- **③ 튜닝 과정**: 구체적 조치만 넣는다 (CREATE INDEX, 쿼리 변경 등). 이론 설명은 ②에서 마무리하고, ③에서 반복하지 않는다.
+
+### 보조 내용 처리
+
+주제의 핵심은 아니지만 관련 있는 보조 이론(예: 다른 난이도에서 깊게 다루는 주제)은 아래 방식으로 처리한다.
+
+- `<details>` 접기/펼치기로 본문 흐름을 끊지 않으면서 제공한다
+- 본문 표 등에서 보조 내용과 연결되는 항목은 `*` 등으로 마킹하여 접기/펼치기와 연결한다
+- 접기/펼치기 안에서 관련된 다른 난이도 토픽으로 링크하여, 더 깊은 학습 경로를 안내한다
+
+### 실전 문제 출제 원칙
+
+- Practice/Quiz는 **본문에서 직접 다룬 핵심 내용** 위주로 출제한다
+- 보조 내용(`<details>` 접기/펼치기)은 **Quiz 보기(선택지) 수준**까지만 활용 가능하다. 보조 내용 자체를 문제의 핵심으로 삼지 않는다
 
 ### 템플릿 예외
 
@@ -108,3 +126,7 @@ CREATE TABLE order_items (
 - 하나의 주제 안에서 독립적인 하위 시나리오가 2개 이상인 경우
 
 파트 분할 시 각 파트는 단독으로 읽어도 완결성이 있어야 한다.
+
+## 예제
+
+설계 문서의 깊이·분량·구조는 [example-spec.md](example-spec.md)를 참고한다.

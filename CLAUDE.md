@@ -36,6 +36,7 @@
 - `docs/plans/` — 구현 계획서 (Task별 분할). `00-overview.md`가 공통 컨텍스트 및 Task 의존성 테이블을 포함한다.
 - `docs/architecture.md` — Mermaid 기반 시스템 아키텍처 다이어그램
 - `docs/topics/` — 난이도별 콘텐츠 토픽 목록 (beginner / intermediate / advanced)
+- `docs/contents/` — 난이도별 상세 콘텐츠 (beginner / intermediate / advanced). 콘텐츠 작성 가이드는 `content-guide.md` 참고.
 
 ## 프로젝트 개요
 

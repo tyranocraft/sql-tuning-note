@@ -9,18 +9,24 @@
 
 **파일:**
 - 수정: `src/app/layout.tsx` (메타데이터)
-- 수정: `src/app/[locale]/page.tsx` (generateMetadata)
+- 수정: `src/app/[locale]/page.tsx` (generateStaticParams, generateMetadata)
 - 수정: `src/app/[locale]/notes/[database]/page.tsx` (generateMetadata)
 - 수정: `src/app/[locale]/notes/[database]/[slug]/page.tsx` (generateMetadata)
 - 생성: `src/app/sitemap.ts`
 - 생성: `src/app/robots.ts`
+- 생성: `src/lib/constants.ts` (BASE_URL 공유 상수)
 
-- [ ] **Step 1: 랜딩 페이지에 generateMetadata 추가**
+- [x] **Step 1: 랜딩 페이지에 generateStaticParams 및 generateMetadata 추가**
 
 `src/app/[locale]/page.tsx`의 default export 앞에 추가:
 
 ```tsx
 import type { Metadata } from "next";
+import { locales } from "@/lib/i18n";
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({
   params,
@@ -49,7 +55,7 @@ export async function generateMetadata({
 }
 ```
 
-- [ ] **Step 2: 콘텐츠 목록 페이지에 generateMetadata 추가**
+- [x] **Step 2: 콘텐츠 목록 페이지에 generateMetadata 추가**
 
 `src/app/[locale]/notes/[database]/page.tsx`에 추가:
 
@@ -76,7 +82,7 @@ export async function generateMetadata({
 }
 ```
 
-- [ ] **Step 3: 콘텐츠 상세 페이지에 generateMetadata 추가**
+- [x] **Step 3: 콘텐츠 상세 페이지에 generateMetadata 추가**
 
 `src/app/[locale]/notes/[database]/[slug]/page.tsx`에 추가:
 
@@ -116,41 +122,44 @@ export async function generateMetadata({
 }
 ```
 
-- [ ] **Step 4: sitemap 생성**
+- [x] **Step 4: sitemap 생성**
 
 `src/app/sitemap.ts` 생성:
 
 ```ts
 import { MetadataRoute } from "next";
 import { getAllContent } from "@/lib/content";
+import { locales, databases } from "@/lib/i18n";
+import { BASE_URL } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://sql-tuning-note.vercel.app";
   const entries: MetadataRoute.Sitemap = [];
 
-  for (const locale of ["ko", "en"]) {
+  for (const locale of locales) {
     entries.push({
-      url: `${baseUrl}/${locale}`,
+      url: `${BASE_URL}/${locale}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     });
 
-    entries.push({
-      url: `${baseUrl}/${locale}/notes/mysql`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    });
-
-    const contents = getAllContent("mysql", locale);
-    for (const content of contents) {
+    for (const database of databases) {
       entries.push({
-        url: `${baseUrl}/${locale}/notes/mysql/${content.slug}`,
-        lastModified: new Date(content.updatedAt),
-        changeFrequency: "monthly",
-        priority: 0.6,
+        url: `${BASE_URL}/${locale}/notes/${database}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       });
+
+      const contents = getAllContent(database, locale);
+      for (const content of contents) {
+        entries.push({
+          url: `${BASE_URL}/${locale}/notes/${database}/${content.slug}`,
+          lastModified: new Date(content.updatedAt),
+          changeFrequency: "monthly",
+          priority: 0.6,
+        });
+      }
     }
   }
 
@@ -158,33 +167,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
 }
 ```
 
-- [ ] **Step 5: robots.txt 생성**
+- [x] **Step 5: robots.txt 생성**
 
 `src/app/robots.ts` 생성:
 
 ```ts
 import { MetadataRoute } from "next";
+import { BASE_URL } from "@/lib/constants";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://sql-tuning-note.vercel.app";
-
   return {
     rules: {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }
 ```
 
-- [ ] **Step 6: 루트 레이아웃에 lang 속성 설정**
+- [x] **Step 6: 루트 레이아웃에 lang 속성 설정**
 
 `<html>` 태그에 동적 `lang` 속성이 필요하다. 루트 레이아웃은 `[locale]` 세그먼트 상위에 있어 직접 locale 값에 접근할 수 없다. SEO를 위해 `<html>`과 `<body>` 태그를 로케일 레이아웃으로 이동하는 방식을 사용한다.
 
-`src/app/layout.tsx` 수정:
+`src/app/layout.tsx` 수정 — `<html>`과 `<body>`를 제거하되, locale 레이아웃을 거치지 않는 경로(404 등)를 위한 fallback 메타데이터는 유지한다:
 
 ```tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SQL Tuning Note",
+  description: "SQL query performance optimization guide",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -241,7 +256,7 @@ export default async function LocaleLayout({
 }
 ```
 
-- [ ] **Step 7: 빌드 성공 확인**
+- [x] **Step 7: 빌드 성공 확인**
 
 ```bash
 npm run build
@@ -249,7 +264,7 @@ npm run build
 
 기대 결과: 빌드가 에러 없이 완료되고, 모든 정적 페이지가 생성됨.
 
-- [ ] **Step 8: 브라우저에서 SEO 확인**
+- [x] **Step 8: 브라우저에서 SEO 확인**
 
 ```bash
 npm run dev
@@ -262,20 +277,4 @@ npm run dev
 - /robots.txt 접속 시 내용 확인
 
 개발 서버를 중지한다.
-
-- [ ] **Step 9: Vercel 배포**
-
-Vercel CLI를 사용하는 경우:
-
-```bash
-npx vercel --prod
-```
-
-또는 Git 저장소를 Vercel 대시보드에 연결하여 배포한다.
-
-배포된 사이트 확인:
-- 랜딩 페이지가 정상 로드됨
-- 콘텐츠 페이지에 구문 하이라이팅이 적용되어 렌더링됨
-- 언어 전환이 정상 동작함
-- 모든 MVP 완료 기준을 충족함
 

@@ -1,9 +1,40 @@
 import Link from "next/link";
-import { getDictionary, isValidLocale } from "@/lib/i18n";
+import type { Metadata } from "next";
+import { getDictionary, isValidLocale, locales } from "@/lib/i18n";
 import { getAllContent } from "@/lib/content";
 import ContentCard from "@/components/ContentCard";
 import type { Locale } from "@/lib/types";
 import { notFound } from "next/navigation";
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
+
+  const dictionary = await getDictionary(locale as Locale);
+
+  return {
+    title: dictionary.site.title,
+    description: dictionary.site.description,
+    openGraph: {
+      title: dictionary.site.title,
+      description: dictionary.site.description,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dictionary.site.title,
+      description: dictionary.site.description,
+    },
+  };
+}
 
 export default async function LandingPage({
   params,

@@ -1,8 +1,28 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getDictionary, isValidLocale } from "@/lib/i18n";
 import { getAllContent } from "@/lib/content";
 import ContentList from "@/components/ContentList";
 import type { Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; database: string }>;
+}): Promise<Metadata> {
+  const { locale, database } = await params;
+  if (!isValidLocale(locale)) return {};
+
+  const dictionary = await getDictionary(locale as Locale);
+  const title = `${database.toUpperCase()} — ${dictionary.site.title}`;
+
+  return {
+    title,
+    description: dictionary.site.description,
+    openGraph: { title, description: dictionary.site.description },
+    twitter: { card: "summary", title },
+  };
+}
 
 export function generateStaticParams() {
   return [

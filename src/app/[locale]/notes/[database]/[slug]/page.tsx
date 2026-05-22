@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import { isValidLocale, getDictionary, locales, databases } from "@/lib/i18n";
@@ -8,6 +9,38 @@ import { mdxComponents } from "@/components/MDXComponents";
 import { DictionaryProvider } from "@/components/DictionaryProvider";
 import DifficultyBadge from "@/components/DifficultyBadge";
 import type { ContentMeta, Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; database: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, database, slug } = await params;
+  if (!isValidLocale(locale)) return {};
+
+  const content = getContentBySlug(database, locale, slug);
+  if (!content) return {};
+
+  const dictionary = await getDictionary(locale as Locale);
+  const title = `${content.title} — ${dictionary.site.title}`;
+  const description = `${content.title} (${dictionary.filter[content.difficulty]})`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+    keywords: content.tags,
+  };
+}
 
 export function generateStaticParams() {
     const params: { locale: string; database: string; slug: string }[] = [];
